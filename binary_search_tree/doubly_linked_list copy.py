@@ -1,3 +1,7 @@
+"""Each ListNode holds a reference to its previous node
+as well as its next node in the List."""
+
+
 class ListNode:
     def __init__(self, value, prev=None, next=None):
         self.value = value
@@ -47,8 +51,8 @@ class DoublyLinkedList:
     def __len__(self):
         return self.length
 
-    """Wraps the given value in a ListNode and inserts it
-    as the new head of the list. Don't forget to handle
+    """Wraps the given value in a ListNode and inserts it 
+    as the new head of the list. Don't forget to handle 
     the old head node's previous pointer accordingly."""
 
     def add_to_head(self, value):
@@ -72,8 +76,8 @@ class DoublyLinkedList:
         self.delete(self.head)
         return value
 
-    """Wraps the given value in a ListNode and inserts it
-    as the new tail of the list. Don't forget to handle
+    """Wraps the given value in a ListNode and inserts it 
+    as the new tail of the list. Don't forget to handle 
     the old tail node's next pointer accordingly."""
 
     def add_to_tail(self, value):
@@ -85,10 +89,9 @@ class DoublyLinkedList:
         else:
             self.tail.next = new_node
             self.tail = new_node
-
         self.length += 1
 
-    """Removes the List's current tail node, making the
+    """Removes the List's current tail node, making the 
     current tail's previous node the new tail of the List.
     Returns the value of the removed Node."""
 
@@ -97,24 +100,22 @@ class DoublyLinkedList:
         self.delete(self.tail)
         return value
 
-    """Removes the input node from its current spot in the
+    """Removes the input node from its current spot in the 
     List and inserts it as the new head node of the List."""
 
     def move_to_front(self, node):
         if node is self.head:
             return
-
         value = node.value
         self.delete(node)
         self.add_to_head(value)
 
-    """Removes the input node from its current spot in the
+    """Removes the input node from its current spot in the 
     List and inserts it as the new tail node of the List."""
 
     def move_to_end(self, node):
         if node is self.tail:
             return
-
         value = node.value
         self.delete(node)
         self.add_to_tail(value)
@@ -152,64 +153,3 @@ class DoublyLinkedList:
             current = current.next
 
         return max_val
-
-
-class LRUCache:
-    """
-    Our LRUCache class keeps track of the max number of nodes it
-    can hold, the current number of nodes it is holding, a doubly-
-    linked list that holds the key-value entries in the correct
-    order, as well as a storage dict that provides fast access
-    to every node stored in the cache.
-    """
-
-    def __init__(self, limit=10):
-        self.limit = limit
-        self.size = 0
-        self.cache = DoublyLinkedList()
-        self.storage = {}
-
-    """
-    Retrieves the value associated with the given key. Also
-    needs to move the key-value pair to the end of the order
-    such that the pair is considered most-recently used.
-    Returns the value associated with the key or None if the
-    key-value pair doesn't exist in the cache.
-    """
-
-    def get(self, key):
-        if key in self.storage:
-            node = self.storage[key]
-            self.cache.move_to_end(node)
-
-            return node.value[1]
-        else:
-            return None
-
-    """
-    Adds the given key-value pair to the cache. The newly-
-    added pair should be considered the most-recently used
-    entry in the cache. If the cache is already at max capacity
-    before this entry is added, then the oldest entry in the
-    cache needs to be removed to make room. Additionally, in the
-    case that the key already exists in the cache, we simply
-    want to overwrite the old value associated with the key with
-    the newly-specified value.
-    """
-
-    def set(self, key, value):
-        if key in self.storage:
-            node = self.storage[key]
-            node.value = (key, value)
-            self.cache.move_to_end(node)
-
-            return
-
-        if self.size == self.limit:
-            del self.storage[self.cache.head.value[0]]
-            self.cache.remove_from_head()
-            self.size -= 1
-
-        self.cache.add_to_tail((key, value))
-        self.storage[key] = self.cache.tail
-        self.size += 1
